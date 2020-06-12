@@ -68,6 +68,10 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_is_a, 0, 2, _IS_BOOL, 0)
 	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, allow_string, _IS_BOOL, 0, "false")
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_get_class_constants, 0, 1, MAY_BE_ARRAY|MAY_BE_FALSE)
+	ZEND_ARG_TYPE_INFO(0, class_name, IS_STRING, 0)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_get_class_vars, 0, 1, MAY_BE_ARRAY|MAY_BE_FALSE)
 	ZEND_ARG_TYPE_INFO(0, class_name, IS_STRING, 0)
 ZEND_END_ARG_INFO()
@@ -225,6 +229,7 @@ ZEND_FUNCTION(get_called_class);
 ZEND_FUNCTION(get_parent_class);
 ZEND_FUNCTION(is_subclass_of);
 ZEND_FUNCTION(is_a);
+ZEND_FUNCTION(get_class_constants);
 ZEND_FUNCTION(get_class_vars);
 ZEND_FUNCTION(get_object_vars);
 ZEND_FUNCTION(get_mangled_object_vars);
@@ -285,6 +290,7 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(get_parent_class, arginfo_get_parent_class)
 	ZEND_FE(is_subclass_of, arginfo_is_subclass_of)
 	ZEND_FE(is_a, arginfo_is_a)
+	ZEND_FE(get_class_constants, arginfo_get_class_constants)
 	ZEND_FE(get_class_vars, arginfo_get_class_vars)
 	ZEND_FE(get_object_vars, arginfo_get_object_vars)
 	ZEND_FE(get_mangled_object_vars, arginfo_get_mangled_object_vars)

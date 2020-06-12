@@ -36,6 +36,8 @@ function is_subclass_of($object, string $class_name, bool $allow_string = true):
 
 function is_a($object, string $class_name, bool $allow_string = false): bool {}
 
+function get_class_constants(string $class_name): array|false {}
+
 function get_class_vars(string $class_name): array|false {}
 
 function get_object_vars(object $obj): array {}

@@ -735,6 +735,42 @@ ZEND_FUNCTION(is_a)
 }
 /* }}} */
 
+/* {{{ proto array get_class_consts(string class_name)
+   Returns an array of default properties of the class. */
+ZEND_FUNCTION(get_class_constants)
+{
+	zend_string *class_name;
+	zend_class_entry *ce;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "S", &class_name) == FAILURE) {
+		RETURN_THROWS();
+	}
+
+	ce = zend_lookup_class(class_name);
+	if (!ce) {
+		RETURN_FALSE;
+	} else {
+		array_init(return_value);
+		
+		zend_string *key;
+		zend_class_constant *constant;
+		zend_class_entry *scope = zend_get_called_scope(EG(current_execute_data));
+		zval val;
+		ZEND_HASH_FOREACH_STR_KEY_PTR(&ce->constants_table, key, constant) {
+			if (((Z_ACCESS_FLAGS(constant->value) & ZEND_ACC_PROTECTED) &&
+				  !zend_check_protected(constant->ce, scope)) ||
+				((Z_ACCESS_FLAGS(constant->value) & ZEND_ACC_PRIVATE) &&
+				  constant->ce != scope)) {
+				continue;
+			}
+
+			ZVAL_COPY_OR_DUP(&val, &constant->value);
+			zend_hash_add_new(Z_ARRVAL_P(return_value), key, &val);
+		} ZEND_HASH_FOREACH_END();
+	}
+}
+/* }}} */
+
 /* {{{ add_class_vars */
 static void add_class_vars(zend_class_entry *scope, zend_class_entry *ce, int statics, zval *return_value)
 {
